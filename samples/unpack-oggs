@@ -1,0 +1,5 @@
+#!/bin/bash
+for w in *.ogg
+do
+  oggdec $w ${2/ogg/wav}
+done

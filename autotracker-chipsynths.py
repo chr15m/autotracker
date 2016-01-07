@@ -1,14 +1,5 @@
 #!/usr/bin/env python
-# autotracker-bottomup - the quite a few times more ultimate audio experience
-# by Ben "GreaseMonkey" Russell, 2011. Public domain.
-#
-#
-#
-# BUGS:
-# - sometimes gets stuck in an infinite loop. attempted to alleviate it but it doesn't work.
-# - i think it sometimes jumps further than an octave in some situations
-# oh and:
-# - has moments where it sounds bad. if you can fix this for good, let me know!
+# Original by Ben "GreaseMonkey" Russell, 2011. Public domain.
 
 import os
 import sys
@@ -34,6 +25,7 @@ if len(sys.argv) > 1:
 print "Creating module"
 itf = ITFile()
 
+# TODO: Generator_ArpMadness
 # TODO: Generator_FractalAcid
 # TODO: Generator_DrumLoops
 
@@ -41,8 +33,6 @@ print "Generating samples"
 # these could do with some work, they're a bit crap ATM --GM
 # note: commented a couple out as they use a fair whack of space and are unused.
 MIDDLE_C = 220.0 * (2.0 ** (3.0 / 12.0))
-SMP_GUITAR = itf.smp_add(Sample_KS(name = "KS Guitar", freq = MIDDLE_C/2, decay = 0.005, nfrqmul = 1.0, filt0 = 0.1, filtn = 0.6, filtf = 0.0004, length_sec = 1.0))
-SMP_BASS = itf.smp_add(Sample_KS(name = "KS Bass", freq = MIDDLE_C/4, decay = 0.005, nfrqmul = 0.5, filt0 = 0.2, filtn = 0.2, filtf = 0.005, length_sec = 0.7))
 #SMP_PIANO = itf.smp_add(Sample_KS(name = "KS Piano", freq = MIDDLE_C, decay = 0.07, nfrqmul = 0.02, filtdc = 0.1, filt0 = 0.09, filtn = 0.6, filtf = 0.4, length_sec = 1.0))
 #SMP_HOOVER = itf.smp_add(Sample_Hoover(name = "Hoover", freq = MIDDLE_C))
 
@@ -51,19 +41,23 @@ SMP_HHC = itf.smp_add(Sample_NoiseHit(name = "NH Hihat Closed", gvol = 32, decay
 SMP_HHO = itf.smp_add(Sample_NoiseHit(name = "NH Hihat Open", gvol = 32, decay = 0.5, filtl = 0.99, filth = 0.20))
 SMP_SNARE = itf.smp_add(Sample_NoiseHit(name = "NH Snare", decay = 0.12, filtl = 0.15, filth = 0.149))
 
-SMP_C64 = itf.smp_add(Sample_File(name = "bleep", filename="samples/" + random.choice([f for f in os.listdir("samples") if f.startswith("c64") and "-hi." in f])))
+SMP_HI = itf.smp_add(Sample_File(name = "bleep", filename="samples/" + random.choice([f for f in os.listdir("samples") if f.startswith("c64") and "-hi." in f])))
+
+if random.randint(0, 1):
+    SMP_BASS = itf.smp_add(Sample_KS(name = "KS Bass", freq = MIDDLE_C/4, decay = 0.005, nfrqmul = 0.5, filt0 = 0.2, filtn = 0.2, filtf = 0.005, length_sec = 0.7))
+else:
+    SMP_BASS = itf.smp_add(Sample_File(name = "bleep-bass", filename="samples/" + random.choice([f for f in os.listdir("samples") if f.startswith("c64") and "-lo." in f])))
 
 print "Generating patterns"
 strat = Strategy_Main(random.randint(50,50+12-1)+12, Key_Minor if random.random() < 0.6 else Key_Major, 128, 32)
 strat.gen_add(Generator_Drums(s_kick = SMP_KICK, s_snare = SMP_SNARE, s_hhc = SMP_HHC, s_hho = SMP_HHO))
-strat.gen_add(Generator_AmbientMelody(smp = SMP_C64))
+strat.gen_add(Generator_AmbientMelody(smp = SMP_HI))
 strat.gen_add(Generator_Bass(smp = SMP_BASS))
 
 for i in xrange(6):
     itf.ord_add(itf.pat_add(strat.get_pattern()))
 
 print "Saving"
-
 if len(sys.argv) > 1:
     name = sys.argv[1]
 else:
