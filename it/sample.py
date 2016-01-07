@@ -7,6 +7,8 @@
 import random
 import struct
 import math
+import wave
+import os
 
 from constants import *
 
@@ -205,6 +207,39 @@ class Sample_NoiseHit(Sample):
                 vol_noise = 0.0
 
         return l
+
+class Sample_File(Sample):
+    name = "File"
+    flags = IT_BASEFLG_SAMPLE
+    boost = 1.0
+
+    def generate(self, filename, loop=False):
+        if loop:
+            self.flags |= IT_SAMPLE_LOOP
+        self.name = os.path.basename(filename)
+        
+        w = wave.open(filename)
+        sampwidth = w.getsampwidth()
+        channels = range(w.getnchannels())
+        #print "sampwidth", sampwidth
+        #print "channels", len(channels)
+        
+        # fmt = (None, "=B", "=h", None, "=l")[sampwidth]
+        fmt = {1: "=B",
+               2: "=h",
+               4: "=l"}[sampwidth]
+        #dc = (None, 128, 0, None, 0)[sampwidth]
+
+        floats = []
+        iframe = True
+        while iframe:
+            iframe = w.readframes(1)
+            if len(iframe):
+                size = len(iframe) / len(channels)
+                chan_chunks = [struct.unpack(fmt, iframe[size * c:size * (c + 1)])[0] for c in channels]
+                # mix down all of the channel chunks into mono
+                floats.append(sum(chan_chunks) / len(channels))
+        return floats
 
 class Sample_Hoover(Sample):
     name = "Hoover"
