@@ -920,6 +920,10 @@ class Generator_Drums(Generator):
 
 MIDDLE_C = 220.0 * (2.0 ** (3.0 / 12.0))
 
+if len(sys.argv) > 1:
+    print "Seeding with ", sys.argv[1]
+    random.seed(sys.argv[1])
+
 print "Creating module"
 itf = ITFile()
 
@@ -1047,11 +1051,12 @@ def randoname():
 
     return pat
 
-name = randoname()
+if len(sys.argv) > 1:
+    name = sys.argv[1]
+else:
+    name = randoname()
 itf.name = name
 fname = "bu-%s.it" % name.replace(" ","-").replace("'","")
-if len(sys.argv) > 1:
-    fname = sys.argv[1]
 itf.save(fname)
 
 print "Done"
