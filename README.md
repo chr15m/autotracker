@@ -1,6 +1,6 @@
 a hacked & extended version of the original autotracker.py by Ben Russell.
 
-using this in http://weeklbeats.com/ 2016.
+using this in http://weeklybeats.com/ 2016.
 
 it is easier to write code that writes music than it is to write music.
 
