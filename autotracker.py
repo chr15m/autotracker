@@ -34,9 +34,6 @@ if len(sys.argv) > 1:
 print "Creating module"
 itf = ITFile()
 
-# TODO: Generator_FractalAcid
-# TODO: Generator_DrumLoops
-
 print "Generating samples"
 # these could do with some work, they're a bit crap ATM --GM
 # note: commented a couple out as they use a fair whack of space and are unused.

@@ -29,10 +29,6 @@ itf = ITFile()
 home = os.path.dirname(__file__)
 samples = os.path.join(home, "samples")
 
-# TODO: Generator_DrumLoops
-# TODO: Generator_ArpMadness
-# TODO: Generator_FractalAcid
-
 print "Generating samples"
 # these could do with some work, they're a bit crap ATM --GM
 # note: commented a couple out as they use a fair whack of space and are unused.
