@@ -241,6 +241,14 @@ class Sample_File(Sample):
                 floats.append(sum(chan_chunks) / len(channels))
         return floats
 
+class Sample_FileSlice(Sample_File):
+    name = "FileSlice"
+    
+    def generate(self, filename, slices=16, which=0, loop=False):
+        floats = Sample_File.generate(self, filename, loop)
+        slice_width = len(floats) / slices
+        return floats[which * slice_width:(which + 1) * slice_width]
+
 class Sample_Hoover(Sample):
     name = "Hoover"
     flags = IT_BASEFLG_SAMPLE | IT_SAMPLE_LOOP
