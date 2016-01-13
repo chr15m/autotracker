@@ -264,3 +264,16 @@ class Generator_Drums(Generator):
 
                 did_kick = not did_kick
 
+class Generator_Breaks(Generator):
+    def __init__(self, s_chunks, pitch=60, *args, **kwargs):
+        self.s_chunks = s_chunks
+        self.pitch = pitch
+        self.beatrow = 4
+    
+    def size(self):
+        return 1
+    
+    def apply_notes(self, chn, pat, strat, rhythm, bbeg, blen, kroot, kchord):
+        for row in xrange(bbeg,bbeg+blen,self.beatrow):
+            pat.data[row][0] = [self.pitch, self.s_chunks[(row / self.beatrow) % len(self.s_chunks)], 255, 0, 0]
+
