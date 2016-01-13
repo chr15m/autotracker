@@ -33,7 +33,7 @@ class ITFile:
         )
         self.gvol = 128
         self.mvol = 48
-        self.tempo = random.randint(90,160)
+        self.tempo = 180
         self.speed = 3
         self.pitchwheel = 0
         self.pansep = 128

@@ -25,6 +25,9 @@ if len(sys.argv) > 1:
 print "Creating module"
 itf = ITFile()
 
+# set the tempo
+itf.tempo = random.randint(120,185)
+
 # path to this script's home
 home = os.path.dirname(__file__)
 samples = os.path.join(home, "samples")

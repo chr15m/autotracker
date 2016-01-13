@@ -34,6 +34,9 @@ if len(sys.argv) > 1:
 print "Creating module"
 itf = ITFile()
 
+# set the tempo
+itf.tempo = random.randint(90,160)
+
 print "Generating samples"
 # these could do with some work, they're a bit crap ATM --GM
 # note: commented a couple out as they use a fair whack of space and are unused.
