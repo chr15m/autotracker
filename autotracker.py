@@ -27,50 +27,59 @@ from name import randoname
 #               #
 #################
 
-if len(sys.argv) > 1:
-    print "Seeding with ", sys.argv[1]
-    random.seed(sys.argv[1])
-
-print "Creating module"
-itf = ITFile()
-
-# set the tempo
-itf.tempo = random.randint(90,160)
-
-print "Generating samples"
-# these could do with some work, they're a bit crap ATM --GM
-# note: commented a couple out as they use a fair whack of space and are unused.
 MIDDLE_C = 220.0 * (2.0 ** (3.0 / 12.0))
-SMP_GUITAR = itf.smp_add(Sample_KS(name = "KS Guitar", freq = MIDDLE_C/2, decay = 0.005, nfrqmul = 1.0, filt0 = 0.1, filtn = 0.6, filtf = 0.0004, length_sec = 1.0))
-SMP_BASS = itf.smp_add(Sample_KS(name = "KS Bass", freq = MIDDLE_C/4, decay = 0.005, nfrqmul = 0.5, filt0 = 0.2, filtn = 0.2, filtf = 0.005, length_sec = 0.7))
-#SMP_PIANO = itf.smp_add(Sample_KS(name = "KS Piano", freq = MIDDLE_C, decay = 0.07, nfrqmul = 0.02, filtdc = 0.1, filt0 = 0.09, filtn = 0.6, filtf = 0.4, length_sec = 1.0))
-#SMP_HOOVER = itf.smp_add(Sample_Hoover(name = "Hoover", freq = MIDDLE_C))
 
-SMP_KICK = itf.smp_add(Sample_Kicker(name = "Kick"))
-SMP_HHC = itf.smp_add(Sample_NoiseHit(name = "NH Hihat Closed", gvol = 32, decay = 0.03, filtl = 0.99, filth = 0.20))
-SMP_HHO = itf.smp_add(Sample_NoiseHit(name = "NH Hihat Open", gvol = 32, decay = 0.5, filtl = 0.99, filth = 0.20))
-SMP_SNARE = itf.smp_add(Sample_NoiseHit(name = "NH Snare", decay = 0.12, filtl = 0.15, filth = 0.149))
+def main(argv, callback=None):
+    if len(argv) > 1:
+        print "Seeding with ", argv[1]
+        random.seed(argv[1])
+    
+    print "Creating module"
+    itf = ITFile()
+    
+    itf = callback(itf)
+    
+    print "Saving"
+    
+    if len(argv) > 1:
+        name = argv[1]
+    else:
+        name = randoname()
+    itf.name = name
+    fname = "bu-%s.it" % name.replace(" ","-").replace("'","")
+    itf.save(fname)
+    
+    print "Done"
+    print "Saved as \"%s\"" % fname
 
-SMP_C64 = itf.smp_add(Sample_File(name = "bleep", filename="samples/" + random.choice([f for f in os.listdir("samples") if f.startswith("c64") and "-hi." in f])))
+def default(itf):
+    # set the tempo
+    itf.tempo = random.randint(90,160)
+    
+    print "Generating samples"
+    # these could do with some work, they're a bit crap ATM --GM
+    # note: commented a couple out as they use a fair whack of space and are unused.
+    SMP_GUITAR = itf.smp_add(Sample_KS(name = "KS Guitar", freq = MIDDLE_C/2, decay = 0.005, nfrqmul = 1.0, filt0 = 0.1, filtn = 0.6, filtf = 0.0004, length_sec = 1.0))
+    SMP_BASS = itf.smp_add(Sample_KS(name = "KS Bass", freq = MIDDLE_C/4, decay = 0.005, nfrqmul = 0.5, filt0 = 0.2, filtn = 0.2, filtf = 0.005, length_sec = 0.7))
+    #SMP_PIANO = itf.smp_add(Sample_KS(name = "KS Piano", freq = MIDDLE_C, decay = 0.07, nfrqmul = 0.02, filtdc = 0.1, filt0 = 0.09, filtn = 0.6, filtf = 0.4, length_sec = 1.0))
+    #SMP_HOOVER = itf.smp_add(Sample_Hoover(name = "Hoover", freq = MIDDLE_C))
+    
+    SMP_KICK = itf.smp_add(Sample_Kicker(name = "Kick"))
+    SMP_HHC = itf.smp_add(Sample_NoiseHit(name = "NH Hihat Closed", gvol = 32, decay = 0.03, filtl = 0.99, filth = 0.20))
+    SMP_HHO = itf.smp_add(Sample_NoiseHit(name = "NH Hihat Open", gvol = 32, decay = 0.5, filtl = 0.99, filth = 0.20))
+    SMP_SNARE = itf.smp_add(Sample_NoiseHit(name = "NH Snare", decay = 0.12, filtl = 0.15, filth = 0.149))
+    
+    print "Generating patterns"
+    strat = Strategy_Main(random.randint(50,50+12-1)+12, Key_Minor if random.random() < 0.6 else Key_Major, 128, 32)
+    strat.gen_add(Generator_Drums(s_kick = SMP_KICK, s_snare = SMP_SNARE, s_hhc = SMP_HHC, s_hho = SMP_HHO))
+    strat.gen_add(Generator_AmbientMelody(smp = SMP_GUITAR))
+    strat.gen_add(Generator_Bass(smp = SMP_BASS))
+    
+    for i in xrange(6):
+        itf.ord_add(itf.pat_add(strat.get_pattern()))
 
-print "Generating patterns"
-strat = Strategy_Main(random.randint(50,50+12-1)+12, Key_Minor if random.random() < 0.6 else Key_Major, 128, 32)
-strat.gen_add(Generator_Drums(s_kick = SMP_KICK, s_snare = SMP_SNARE, s_hhc = SMP_HHC, s_hho = SMP_HHO))
-strat.gen_add(Generator_AmbientMelody(smp = SMP_C64))
-strat.gen_add(Generator_Bass(smp = SMP_BASS))
+    return itf
 
-for i in xrange(6):
-    itf.ord_add(itf.pat_add(strat.get_pattern()))
+if __name__ == "__main__":
+    main(sys.argv, default)
 
-print "Saving"
-
-if len(sys.argv) > 1:
-    name = sys.argv[1]
-else:
-    name = randoname()
-itf.name = name
-fname = "bu-%s.it" % name.replace(" ","-").replace("'","")
-itf.save(fname)
-
-print "Done"
-print "Saved as \"%s\"" % fname
