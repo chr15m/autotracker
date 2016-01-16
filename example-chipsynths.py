@@ -10,11 +10,7 @@ from generators import Generator_Drums, Generator_Bass, Generator_AmbientMelody
 from keys import Key_Minor, Key_Major
 from it.sample import Sample_KS, Sample_Kicker, Sample_NoiseHit, Sample_File
 
-from autotracker import main, MIDDLE_C
-
-# path to this script's home
-home = os.path.dirname(__file__)
-samples = os.path.join(home, "samples")
+from autotracker import main, MIDDLE_C, samples
 
 def bleep(t):
     return samples + "/" + random.choice([f for f in os.listdir(samples) if f.startswith("c64") and "-" + t + ".wav" in f])

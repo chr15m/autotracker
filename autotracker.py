@@ -29,6 +29,10 @@ from name import randoname
 
 MIDDLE_C = 220.0 * (2.0 ** (3.0 / 12.0))
 
+# path to this script's home
+home = os.path.dirname(__file__)
+samples = os.path.join(home, "samples")
+
 def main(argv, callback=None):
     if len(argv) > 1:
         print "Seeding with ", argv[1]

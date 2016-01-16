@@ -9,16 +9,12 @@ from generators import Generator_Breaks, Generator_Bass, Generator_AmbientMelody
 from keys import Key_Minor, Key_Major
 from it.sample import Sample_KS, Sample_Kicker, Sample_NoiseHit, Sample_File, Sample_FileSlice
 
-from autotracker import main, MIDDLE_C
+from autotracker import main, MIDDLE_C, samples
 
 def breaks_and_chips(itf):
     pace = random.random()
     # set the tempo
     itf.tempo = int(pace * 65 + 120)
-
-    # path to this script's home
-    home = os.path.dirname(__file__)
-    samples = os.path.join(home, "samples")
 
     print "Generating samples"
     MIDDLE_C = 220.0 * (2.0 ** (3.0 / 12.0))
