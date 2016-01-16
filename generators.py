@@ -277,4 +277,20 @@ class Generator_Breaks(Generator):
         for row in xrange(bbeg,bbeg+blen,self.beatrow):
             pat.data[row][chn] = [self.pitch, self.s_chunks[(row / self.beatrow) % len(self.s_chunks)], 255, 0, 0]
 
+class Generator_ProbabilityTable(Generator):
+    def __init__(self, s_sample, probability_table=[], frequency=4, pitch=60, *args, **kwargs):
+        self.s_sample = s_sample
+        self.beatrow = frequency
+        self.pitch = pitch
+        self.probability_table = probability_table
+    
+    def size(self):
+        return 1
+    
+    def apply_notes(self, chn, pat, strat, rhythm, bbeg, blen, kroot, kchord):
+        for row in xrange(bbeg, bbeg + blen, self.beatrow):
+            lookup_row = self.probability_table[(row / self.beatrow) % len(self.probability_table)]
+            if random.random() < lookup_row:
+                pat.data[row][chn] = [self.pitch, self.s_sample, 127 if ((row / self.beatrow) % 2) else 255, 0, 0]
+
 
