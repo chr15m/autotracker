@@ -293,4 +293,14 @@ class Generator_ProbabilityTable(Generator):
             if random.random() < lookup_row:
                 pat.data[row][chn] = [self.pitch, self.s_sample, 127 if ((row / self.beatrow) % 2) else 255, 0, 0]
 
+class Generator_Callback(Generator):
+    def __init__(self, channels, callback):
+        self.channels = channels
+        self.callback = callback
+    
+    def size(self):
+        return self.channels
+    
+    def apply_notes(self, *args):
+        self.callback(*args)
 
