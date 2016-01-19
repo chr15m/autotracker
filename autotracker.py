@@ -33,7 +33,7 @@ MIDDLE_C = 220.0 * (2.0 ** (3.0 / 12.0))
 home = os.path.dirname(__file__)
 samples = os.path.join(home, "samples")
 
-def main(argv, callback=None):
+def generate(argv, callback=None):
     if len(argv) > 1:
         print "Seeding with ", argv[1]
         random.seed(argv[1])
@@ -85,5 +85,5 @@ def default(itf):
     return itf
 
 if __name__ == "__main__":
-    main(sys.argv, default)
+    generate(sys.argv, default)
 
