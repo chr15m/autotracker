@@ -35,8 +35,12 @@ samples = os.path.join(home, "samples")
 
 def generate(argv, callback=None):
     if len(argv) > 1:
-        print "Seeding with ", argv[1]
-        random.seed(argv[1])
+        name = argv[1]
+    else:
+        name = randoname()
+    
+    print "Seeding with '%s'" % name
+    random.seed(name)
     
     print "Creating module"
     itf = ITFile()
@@ -45,10 +49,6 @@ def generate(argv, callback=None):
     
     print "Saving"
     
-    if len(argv) > 1:
-        name = argv[1]
-    else:
-        name = randoname()
     itf.name = name
     fname = "bu-%s.it" % name.replace(" ","-").replace("'","")
     itf.save(fname)
