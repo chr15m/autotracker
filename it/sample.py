@@ -215,7 +215,19 @@ class Sample_File(Sample):
 
     def generate(self, filename, loop=False):
         if loop:
-            self.flags |= IT_SAMPLE_LOOP
+            if os.path.isfile(filename.replace(".wav", ".loop.txt")):
+                loop_points = file(filename.replace(".wav", ".loop.txt")).read().strip("\n").split(" ")
+                if loop == "sustain":
+                    self.susbeg = int(loop_points[0])
+                    self.susend = int(loop_points[1])
+                    self.flags |= IT_SAMPLE_SUS
+                else:
+                    self.lpbeg = int(loop_points[0])
+                    self.lpend = int(loop_points[1])
+                    self.flags |= IT_SAMPLE_LOOP
+            else:
+                self.flags |= IT_SAMPLE_LOOP
+        
         self.name = os.path.basename(filename)
         
         w = wave.open(filename)
@@ -229,7 +241,7 @@ class Sample_File(Sample):
                2: "=h",
                4: "=l"}[sampwidth]
         #dc = (None, 128, 0, None, 0)[sampwidth]
-
+        
         floats = []
         iframe = True
         while iframe:
