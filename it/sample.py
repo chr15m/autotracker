@@ -240,7 +240,8 @@ class Sample_File(Sample):
         fmt = {1: "=B",
                2: "=h",
                4: "=l"}[sampwidth]
-        #dc = (None, 128, 0, None, 0)[sampwidth]
+        dc = (None, 128, 0, None, 0)[sampwidth]
+        # print "DC", dc
         
         floats = []
         iframe = True
@@ -250,7 +251,7 @@ class Sample_File(Sample):
                 size = len(iframe) / len(channels)
                 chan_chunks = [struct.unpack(fmt, iframe[size * c:size * (c + 1)])[0] for c in channels]
                 # mix down all of the channel chunks into mono
-                floats.append(sum(chan_chunks) / len(channels))
+                floats.append(sum(chan_chunks) / len(channels) - dc)
         return floats
 
 class Sample_FileSlice(Sample_File):
