@@ -13,6 +13,7 @@
 import os
 import sys
 import random
+from hashlib import sha256
 
 from strategies import Strategy_Main
 from generators import Generator_Drums, Generator_Bass, Generator_AmbientMelody
@@ -41,16 +42,15 @@ def generate(argv, callback=None):
     
     print "Seeding with '%s'" % name
     random.seed(name)
+    fname = "bu-%s.it" % name.replace(" ","-").replace("'","")
     
     print "Creating module"
-    itf = ITFile()
-    
-    itf = callback(itf)
+    itf = ITFile(name, "seed-hash " + sha256(name).hexdigest() + "\n")
+    itf = callback(itf, name, fname)
     
     print "Saving"
     
     itf.name = name
-    fname = "bu-%s.it" % name.replace(" ","-").replace("'","")
     itf.save(fname)
     
     print "Done"

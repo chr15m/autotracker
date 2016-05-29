@@ -11,8 +11,8 @@ from constants import *
 
 # NOTE: Currently only writes data.
 class ITFile:
-    def __init__(self):
-        self.name = "autotracker-bu module"
+    def __init__(self, name="autotracker-bu module", message=""):
+        self.name = name
         self.flags = IT_FLAG_STEREO
         self.highlight = 0x1004
         self.ordlist = []
@@ -38,8 +38,10 @@ class ITFile:
         self.pitchwheel = 0
         self.pansep = 128
         self.message = (
-              "Generated with Autotracker-Bu\n"
-            + "2011 Ben \"GreaseMonkey\" Russell - Public domain\n"
+                "Generated with autotracker.py\n" +
+                "https://github.com/chr15m/autotracker/\n" +
+                "Based on Autotracker-Bu\nby Ben \"GreaseMonkey\" Russell\n" +
+                message
         )
 
     def enqueue_ptr(self, call):
