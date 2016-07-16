@@ -45,8 +45,9 @@ def generate(argv, callback=None):
     fname = "bu-%s.it" % name.replace(" ","-").replace("'","")
     
     print "Creating module"
-    itf = ITFile(name, "seed-hash " + sha256(name).hexdigest() + "\n")
-    itf = callback(itf, name, fname)
+    seed_hash = sha256(name).hexdigest()
+    itf = ITFile(name, "seed-hash " + seed_hash + "\n")
+    itf = callback(itf, name, fname, seed_hash)
     
     print "Saving"
     
