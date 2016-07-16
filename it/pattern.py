@@ -1,11 +1,13 @@
 import struct
 
+empty = [253, 0, 255, 0, 0]
+
 class Pattern:
     def __init__(self, rows):
         self.rows = rows
         assert rows >= 4, "too few rows" # note, this is just so modplug doesn't whinge. IT can handle 1-row patterns.
         assert rows <= 200, "too many rows" # on the other hand, IT chunders if you have more than 200 rows.
-        self.data = [[[253,0,255,0,0] for j in xrange(64)] for i in xrange(rows)]
+        self.data = [[empty for j in xrange(64)] for i in xrange(rows)]
 
         # these are the defaults...
         # - note = 253 (0xFD)
