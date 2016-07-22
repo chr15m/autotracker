@@ -41,11 +41,16 @@ def generate(argv, callback=None):
         name = randoname()
     
     print "Seeding with '%s'" % name
-    random.seed(name)
+    try:
+        test_hash = int(name, 16)
+    except:
+        seed_hash = sha256(name).hexdigest()
+    else:
+        seed_hash = name
+    random.seed(seed_hash)
     fname = "bu-%s.it" % name.replace(" ","-").replace("'","")
     
     print "Creating module"
-    seed_hash = sha256(name).hexdigest()
     itf = ITFile(name, "seed-hash " + seed_hash + "\n")
     itf = callback(itf, name, fname, seed_hash)
     
