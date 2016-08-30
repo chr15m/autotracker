@@ -143,6 +143,22 @@ class Sample_KS(Sample):
         # return
         return l
 
+class Sample_Raw(Sample):
+    name = "Raw"
+    boost = 1.0
+    
+    def generate(self, samples=None, flags=0, loop={}):
+        self.flags = IT_BASEFLG_SAMPLE | flags
+        if loop.get("sustain", None):
+            self.susbeg = int(loop["sustain"][0])
+            self.susend = int(loop["sustain"][1])
+            self.flags |= IT_SAMPLE_SUS
+        elif loop.get("loop", None):
+            self.lpbeg = int(loop["loop"][0])
+            self.lpend = int(loop["loop"][1])
+            self.flags |= IT_SAMPLE_LOOP
+        return samples
+
 class Sample_Kicker(Sample):
     name = "Kicker"
     flags = IT_BASEFLG_SAMPLE
