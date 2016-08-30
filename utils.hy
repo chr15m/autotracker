@@ -2,6 +2,7 @@
 (import math)
 (import random)
 (import pprint)
+(import [hashlib [sha256]])
 (import [functools [partial]])
 
 (import [it.itfile [ITFile]])
@@ -94,3 +95,13 @@
 
 (defn add-itf-message-line [itf message]
   (setv itf.message (+ itf.message message "\n")))
+
+(defn random-hash [r]
+  (.hexdigest (sha256 (str (r.random)))))
+
+(defn initial-hash [existing]
+  (try
+    (do (int existing 16) existing)
+    (except [e Exception]
+      (random-hash random))))
+
