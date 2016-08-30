@@ -4,18 +4,11 @@
 (import pprint)
 (import [functools [partial]])
 
-(import [autotracker [samples]])
-(import [autotracker.it.itfile [ITFile]])
-(import [autotracker.it.sample [Sample_File Sample_FileSlice Sample_Raw]])
-(import [autotracker.it.pattern [Pattern]])
+(import [it.itfile [ITFile]])
+(import [it.sample [Sample_File Sample_FileSlice Sample_Raw]])
+(import [it.pattern [Pattern]])
 
 (def here (os.path.dirname __file__))
-
-(defn get-random-bleep [t]
-  (os.path.join samples (random.choice (list-comp f [f (os.listdir samples)] (and (f.startswith "c64") (in (+ "-" t ".wav") f))))))
-
-(defn get-random-sample [subfolder starts-with]
-  (os.path.join samples subfolder (random.choice (list-comp f [f (os.listdir (os.path.join samples subfolder))] (and (f.startswith starts-with) (f.endswith ".wav"))))))
 
 (defn fx-code [c] (- (ord (.lower c)) 96))
 
