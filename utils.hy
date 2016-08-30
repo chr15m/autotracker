@@ -38,6 +38,9 @@
                                [f (os.listdir d)]
                                (f.endswith ".wav")))
 
+(defn dir-sample-list [dir starts-with]
+  (list-comp (os.path.join dir f) [f (os.listdir dir)] (and (f.startswith starts-with) (f.endswith ".wav"))))
+
 (defn print-through [message p] (print message p) p)
 
 (defn generator-wrapper [generator-fn]
