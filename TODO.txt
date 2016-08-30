@@ -1,5 +1,0 @@
-# TODO: Generator_DrumLoops
-# TODO: Generator_ArpMadness
-# TODO: Generator_FractalAcid
-# TODO: Strategy_CircleOfFifths
-# TODO: Strategy_FugueRandoms
