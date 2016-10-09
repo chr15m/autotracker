@@ -79,7 +79,7 @@
                                                    :flags (.get kwargs "flags" 0)
                                                    :loop (.get kwargs "loop" {})))]))
 
-(defn track-builder [track-name bpm pattern-length message]
+(defn track-builder [track-name bpm pattern-length]
   (let [[i (ITFile track-name)]
         [s (partial add-sample i)]
         [p (partial add-pattern i pattern-length)]]
@@ -96,7 +96,7 @@
 (defn post-process [pattern-list processing-fn]
   (list-comp (list-comp (processing-fn row pattern-data.rows) [row pattern-data.data]) [pattern-data pattern-list]))
 
-(defn add-itf-message-line [itf message]
+(defn add-message [itf message]
   (setv itf.message (+ itf.message message "\n")))
 
 (defn random-hash [r]
