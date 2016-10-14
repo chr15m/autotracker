@@ -4,9 +4,13 @@
 
 ; returns [1 0 0 1 ... 0]
 (defn random-rhythm-loop [rnd loop-length]
-  (let [[freq (rnd.choice [1 1 2 2 2 3 3 4 4 4 5 6 6 7 8 8 8])]
+  (let [[freq (rnd.choice [0 0 1 1 2 2 2 3 3 4 4 4 5 6 6 7 8 8 8])]
         [phase (rnd.randint 0 (- loop-length 1))]]
-    (list-comp (int (not (% (+ r phase) freq))) [r (range loop-length)])))
+    (list-comp
+      (int (and
+             freq
+             (not (% (+ r phase) freq))))
+      [r (range loop-length)])))
 
 ; returns [1 0 0 1 ... 0]
 (defn genetic-rhythm-loop [rnd loop-length]
