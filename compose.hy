@@ -33,3 +33,24 @@
         (+ notes [(% (+ (get notes -1) (rnd.choice note-jump-probabilities)) 12)]))
       (sorted notes))))
 
+; uses one to three of the 'transform-' functions on existing notes set
+(defn mutate-notes [rnd original-notes]
+  (let [[mutation-count (rnd.randint 1 3)]]
+    (loop [[x 0] [notes original-notes]]
+      (if (< x mutation-count)
+        (recur
+          (inc x)
+          ((rnd.choice [transform-notes-flip
+                        transform-notes-multiply-prime])
+                       rnd
+                       notes)))
+      notes)))
+
+(defn transform-notes-flip [rnd notes]
+  (let [[pivot (rnd.randint 1 12)]]
+    (list-comp (% (+ (* (- n pivot) -1) pivot) 12) [n notes])))
+
+(defn transform-notes-multiply-prime [rnd notes]
+  (let [[multiplier (rnd.choice [2 3 5 7])]]
+    (list-comp (% (* multiplier n) 12) [n notes])))
+
