@@ -52,6 +52,13 @@
   (let [[multiplier (rnd.choice [2 3 5 7])]]
     (list-comp (% (* multiplier n) 12) [n notes])))
 
+; composing sets of note patterns
+(defn make-notes-progression [rnd]
+  (let [[sections (rnd.choice [1 2 3])]]
+    {:note-sets (make-notes-set rnd sections)
+     :rootnote (rnd.randint 48 72)
+     :pattern (sum (list-comp (* [p] (rnd.choice [2 4 8])) [p (range sections)]) [])}))
+
 (defn make-notes-set [rnd sections]
   (let [[notes-count (rnd.choice [3 4 5])]]
     (loop [[notes-sets [(get-good-notes rnd notes-count)]]]
