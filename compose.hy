@@ -28,7 +28,7 @@
   (loop [[notes [(rnd.randint 0 12)]]]
     (if (< (len notes) n)
       (recur
-        (+ notes [(% (+ (get notes -1) (rnd.choice note-jump-probabilities)) 12)]))
+        (list (set (+ notes [(% (+ (get notes -1) (rnd.choice note-jump-probabilities)) 12)]))))
       (sorted notes))))
 
 ; uses one to three of the 'transform-' functions on existing notes set
