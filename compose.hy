@@ -52,3 +52,12 @@
   (let [[multiplier (rnd.choice [2 3 5 7])]]
     (list-comp (% (* multiplier n) 12) [n notes])))
 
+(defn make-notes-set [rnd sections]
+  (let [[notes-count (rnd.choice [3 4 5])]]
+    (loop [[notes-sets [(get-good-notes rnd notes-count)]]]
+      (if (< (len notes-sets) sections)
+        (recur
+          (+ notes-sets
+            [(mutate-notes rnd (get notes-sets -1))]))
+        notes-sets))))
+
