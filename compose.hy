@@ -25,11 +25,9 @@
 
 ; returns a set of notes like [3 4 7 9]
 (defn get-good-notes [rnd n]
-  ; (random.sample (range 0 12) (+ (max sequence) 1))
-  (loop [[c (dec n)] [notes [(rnd.randint 0 12)]]]
-    (if (> c 0)
+  (loop [[notes [(rnd.randint 0 12)]]]
+    (if (< (len notes) n)
       (recur
-        (dec c)
         (+ notes [(% (+ (get notes -1) (rnd.choice note-jump-probabilities)) 12)]))
       (sorted notes))))
 
