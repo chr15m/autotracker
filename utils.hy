@@ -108,9 +108,9 @@
     (except [e Exception]
       (random-hash random))))
 
-(defn extract-hash [argv]
+(defn extract-hash [argv &optional [which 0]]
   (let [[valid-hashes (list (filter (fn [arg] (try
                                                 (do (int arg 16) arg)
                                                 (except [e Exception]))) argv))]]
-    (if valid-hashes (get valid-hashes 0))))
+    (if (> (len valid-hashes) which) (get valid-hashes which))))
 
