@@ -79,6 +79,9 @@
                                                    :flags (.get kwargs "flags" 0)
                                                    :loop (.get kwargs "loop" {})))]))
 
+(defn sample-length [i sample]
+  (len (getattr (get i.smplist (- sample 1)) "data")))
+
 (defn track-builder [track-name bpm pattern-length]
   (let [[i (ITFile track-name)]
         [s (partial add-sample i)]
