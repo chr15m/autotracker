@@ -68,3 +68,11 @@
             [(mutate-notes rnd (get notes-sets -1))]))
         notes-sets))))
 
+(defn make-fractal-note-sequence [rnd sequence-length number-of-notes &optional [basic-sequence-length 4] [sparseness-probability 0.75]]
+  (let [[basic-sequence (rnd.sample (range number-of-notes) basic-sequence-length)]]
+    (list-comp
+      (if (> (rnd.random) sparseness-probability)
+        nil
+        (get basic-sequence (% (int (/ t (rnd.choice [1 2 4]))) (len basic-sequence))))
+      [t (xrange sequence-length)])))
+
