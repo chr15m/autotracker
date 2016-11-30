@@ -2,6 +2,7 @@
 (import math)
 (import random)
 (import pprint)
+(import [sys [stderr]])
 (import [hashlib [sha256]])
 (import [functools [partial]])
 
@@ -42,6 +43,8 @@
   (list-comp (os.path.join dir f) [f (os.listdir dir)] (and (f.startswith starts-with) (f.endswith ".wav"))))
 
 (defn print-through [message p] (print message p) p)
+
+(defn prerr [&rest parts] (stderr.write (+ (.join " " (list-comp (str x) [x parts])) "\n")))
 
 (defn generator-wrapper [generator-fn]
   (fn [channel-number pattern strategy rhythm beat-begin beats-length key-root key-chord]
