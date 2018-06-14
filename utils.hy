@@ -120,3 +120,6 @@
                                                 (except [e Exception]))) argv))]]
     (if (> (len valid-hashes) which) (get valid-hashes which))))
 
+(defn make-rng [&rest material]
+  (random.Random (str material)))
+
